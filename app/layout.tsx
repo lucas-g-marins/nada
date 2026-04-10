@@ -9,6 +9,7 @@ import {
 } from "@clerk/nextjs";
 import { Courier_Prime } from "next/font/google";
 import "./globals.css";
+import Link from "next/link";
 
 const courierPrime = Courier_Prime({
   weight: "400",
@@ -17,7 +18,7 @@ const courierPrime = Courier_Prime({
 
 export const metadata: Metadata = {
   title: "nada",
-  description: "stupid social media",
+  description: "social media so bad it's actually kinda good.",
 };
 
 export default function RootLayout({
@@ -26,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider appearance={{ theme: "simple" }}>
       <html lang="en">
         <body className={`${courierPrime} antialiased`}>
           <header className="flex justify-end items-center p-4 gap-4 h-16">
@@ -41,6 +42,7 @@ export default function RootLayout({
               </SignUpButton>
             </SignedOut>
             <SignedIn>
+              <Link href={`/feed`}>Feed</Link>
               <UserButton />
             </SignedIn>
           </header>
