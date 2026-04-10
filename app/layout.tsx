@@ -10,6 +10,7 @@ import {
 import { Courier_Prime } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import { ConvexClientProvider } from "./ConvexClientProvider";
 
 const courierPrime = Courier_Prime({
   weight: "400",
@@ -30,6 +31,7 @@ export default function RootLayout({
     <ClerkProvider appearance={{ theme: "simple" }}>
       <html lang="en">
         <body className={`${courierPrime} antialiased`}>
+      
           <header className="flex justify-end items-center p-4 gap-4 h-16">
             <SignedOut>
               <SignInButton>
@@ -46,7 +48,9 @@ export default function RootLayout({
               <UserButton />
             </SignedIn>
           </header>
+          <ConvexClientProvider>
           {children}
+          </ConvexClientProvider>
         </body>
       </html>
     </ClerkProvider>

@@ -1,12 +1,16 @@
 "use client";
 import { useUser } from "@clerk/nextjs";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useQuery } from "convex/react";
+import { api } from "../../convex/_generated/api";
 
 export default function Feed() {
   const { isSignedIn, user } = useUser();
   const [postModalOpen, setPostModalOpen] = useState(false);
   const [postDraft, setPostDraft] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const posts = useQuery(api.posts.get);
 
   const closePostModal = useCallback(() => {
     setPostModalOpen(false);
@@ -43,10 +47,15 @@ export default function Feed() {
             <h3 className="font-bold">user</h3>
             <p>most days aren&apos;t interesting</p>
           </div>
+          {posts?.map((post) => (
+            <div className="p-4 m-4 border-2 border-zinc-700" key={post._id}>
+              <h3>{post.post}</h3>
+            </div>
+          ))}
         </div>
         <button
           type="button"
-          className="absolute bottom-10 right-10 border-2 border-zinc-700 p-4 cursor-pointer bg-transparent text-left font-inherit text-foreground"
+          className="fixed bottom-10 right-10 border-2 border-zinc-700 p-4 cursor-pointer bg-transparent text-left font-inherit text-foreground"
           onClick={() => setPostModalOpen(true)}
         >
           post something.
