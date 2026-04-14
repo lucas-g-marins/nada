@@ -1,16 +1,17 @@
 "use client";
 import { useUser } from "@clerk/nextjs";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useQuery } from "convex/react";
+import { useQuery, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 
 export default function Feed() {
-  const { isSignedIn, user } = useUser();
+  const { isSignedIn, user, isLoaded } = useUser();
   const [postModalOpen, setPostModalOpen] = useState(false);
   const [postDraft, setPostDraft] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const posts = useQuery(api.posts.get);
+  const createPost = useMutation(api.createPost.createPost);
 
   const closePostModal = useCallback(() => {
     setPostModalOpen(false);
@@ -26,7 +27,16 @@ export default function Feed() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [postModalOpen, closePostModal]);
 
-  console.log(user?.emailAddresses[0].emailAddress);
+  const makePost = () => {
+    createPost({
+      userId: user?.id || "",
+      post: postDraft,
+    });
+    setPostDraft("");
+    closePostModal();
+  };
+
+  if (!isLoaded) return <div>Loading...</div>;
 
   if (!isSignedIn) {
     return (
@@ -100,8 +110,7 @@ export default function Feed() {
               <button
                 type="button"
                 onClick={() => {
-                  setPostDraft("");
-                  closePostModal();
+                  makePost();
                 }}
                 className="border-2 border-white p-2 cursor-pointer bg-black text-white"
               >
