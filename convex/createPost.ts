@@ -11,7 +11,7 @@ export const createPost = mutation({
       throw new Error("Not authenticated");
     }
     return await ctx.db.insert("posts", {
-      userId: identity.preferredUsername,
+      userId: identity.username,
       post: args.post,
     });
   },

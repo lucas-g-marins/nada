@@ -20,6 +20,9 @@ const courierPrime = Courier_Prime({
 export const metadata: Metadata = {
   title: "nada",
   description: "social media so bad it's actually kinda good.",
+  icons: {
+    icon: "/icon.png",
+  },
 };
 
 export default function RootLayout({
